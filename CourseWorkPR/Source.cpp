@@ -322,6 +322,12 @@ int main() {
                     else if (event.mouseButton.button == Mouse::Right) {
                         int x = event.mouseButton.x / cellSize;
                         int y = event.mouseButton.y / cellSize;
+                        if (Grid[x][y] == -1 && RevealGrid[x][y] == 0) {
+                            win++;
+                        }
+                        else if (Grid[x][y] == -1 && RevealGrid[x][y] == 2) {
+                            win--;
+                        }
                         if (RevealGrid[x][y] == 0) {
                             RevealGrid[x][y] = 2;
                         }
@@ -330,6 +336,7 @@ int main() {
                         }
                     }
                 }
+
                 else if (islost == 1) {
                     window.close();
                 }
@@ -340,6 +347,18 @@ int main() {
         drawGrid(window, Grid, RevealGrid); // ðèñóåì ïîëå èãðîêà
 
         window.display();
+
+        int openCells = 0;
+        for (int x = 1; x < size + 1; x++) {
+            for (int y = 1; y < size + 1; y++) {
+                if (RevealGrid[x][y] == 1) {
+                    openCells++;
+                }
+            }
+        }
+        if (win == 10 && (openCells == (size*size-numBombs))) {
+            window.close();
+        }
 
     }
 
