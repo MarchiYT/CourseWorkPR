@@ -11,6 +11,7 @@ const int numBombs = 10;
 int win = 0;
 bool islost = 0;
 int face = 1;
+bool firstHit = 1;
 
 Texture border;
 Texture revealed;
@@ -235,8 +236,6 @@ int main() {
     // ðàíäîìíî ðàçìåùàåì êîðàáëè êîìïüþòåðà
     srand(time(NULL));
 
-    Bomb_placement(Grid, size, numBombs);
-
     while (window.isOpen()) {
         Event event;
         while (window.pollEvent(event)) {
@@ -248,6 +247,19 @@ int main() {
                     if (event.mouseButton.button == Mouse::Left) {
                         int x = event.mouseButton.x / cellSize;
                         int y = event.mouseButton.y / cellSize;
+
+                        if (firstHit == 1) {
+                            Bomb_placement(Grid, size, numBombs);
+                            while (Grid[x][y] == -1 || Grid[x][y] == 1 || Grid[x][y] == 2 || Grid[x][y] == 3 || Grid[x][y] == 4 || Grid[x][y] == 5 || Grid[x][y] == 6 || Grid[x][y] == 7 || Grid[x][y] == 8) {
+                                for (int x = 1; x < size + 1; x++) {
+                                    for (int y = 1; y < size + 1; y++) {
+                                        Grid[x][y] = -2;
+                                    }
+                                }
+                                Bomb_placement(Grid, size, numBombs);
+                            }
+                            firstHit = 0;
+                        }
 
                         if ((Grid[x][y] == 1
                             || Grid[x][y] == 2
