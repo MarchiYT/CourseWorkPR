@@ -7,7 +7,7 @@ using namespace sf;
 
 const int cellSize = 32; // ðàçìåð ÿ÷ååê
 const int size = 10; // ðàçìåð ïîëÿ
-const int numBombs = 10;
+const int numBombs = 3;
 int win = 0;
 bool islost = 0;
 int face = 1;
@@ -361,16 +361,16 @@ int main() {
                 for (int y = 1; y < size + 1; y++) {
                     if ((Grid[x][y] == 0 || Grid[x][y] == -2) && RevealGrid[x][y] == 1) {
 
-                        if ((Grid[x + 1][y] == 0 || Grid[x + 1][y] == -2) && (x + 1) >= 1 && (x + 1) < size + 1 && y >= 1 && y < size + 1 && RevealGrid[x + 1][y] != 1) {
+                        if (Grid[x + 1][y] != -3 && Grid[x + 1][y] != -4 && Grid[x + 1][y] != -1 && (x + 1) >= 1 && (x + 1) < size + 1 && y >= 1 && y < size + 1 && RevealGrid[x + 1][y] != 1) {
                             RevealGrid[x + 1][y] = 1;
                         }
-                        if ((Grid[x - 1][y] == 0 || Grid[x - 1][y] == -2) && (x - 1) >= 1 && (x - 1) < size + 1 && y >= 1 && y < size + 1 && RevealGrid[x - 1][y] != 1) {
+                        if (Grid[x - 1][y] != -3 && Grid[x - 1][y] != -4 && Grid[x - 1][y] != -1 && (x - 1) >= 1 && (x - 1) < size + 1 && y >= 1 && y < size + 1 && RevealGrid[x - 1][y] != 1) {
                             RevealGrid[x - 1][y] = 1;
                         }
-                        if ((Grid[x][y + 1] == 0 || Grid[x][y + 1] == -2) && x >= 1 && x < size + 1 && (y + 1) >= 1 && (y + 1) < size + 1 && RevealGrid[x][y + 1] != 1) {
+                        if (Grid[x][y + 1] != -3 && Grid[x][y + 1] != -4 && Grid[x][y + 1] != -1 && x >= 1 && x < size + 1 && (y + 1) >= 1 && (y + 1) < size + 1 && RevealGrid[x][y + 1] != 1) {
                             RevealGrid[x][y + 1] = 1;
                         }
-                        if ((Grid[x][y - 1] == 0 || Grid[x][y - 1] == -2) && x >= 1 && x < size + 1 && (y - 1) >= 1 && (y - 1) < size + 1 && RevealGrid[x][y - 1] != 1) {
+                        if (Grid[x][y - 1] != -3 && Grid[x][y - 1] != -4 && Grid[x][y - 1] != -1 && x >= 1 && x < size + 1 && (y - 1) >= 1 && (y - 1) < size + 1 && RevealGrid[x][y - 1] != 1) {
                             RevealGrid[x][y - 1] = 1;
                         }
                     }
@@ -423,7 +423,6 @@ int main() {
                 }
             }
         }
-        openCells = 0;
 
     }
 
