@@ -365,9 +365,9 @@ int main() {
 
                             Grid[0][0] = -4;
                             srand(time(NULL));
-                            Bomb_placement(Grid, size, numBombs);
                             islost = 0;
                             win = 0;
+                            firstHit = 1;
                         }
                     }
                 }
@@ -435,8 +435,8 @@ int main() {
 
                     Grid[0][0] = -4;
                     srand(time(NULL));
-                    Bomb_placement(Grid, size, numBombs);
                     win = 0;
+                    firstHit = 1;
                 }
             }
         }
