@@ -9,6 +9,7 @@ const int cellSize = 32; // ðàçìåð ÿ÷ååê
 const int size = 10; // ðàçìåð ïîëÿ
 const int numBombs = 10;
 int win = 0;
+bool islost = 0;
 
 Texture revealed;
 Texture hidden;
@@ -141,31 +142,28 @@ void Bomb_placement(int Grid[size + 2][size + 2],int size, int numBombs) {
 }
 
 bool isClear(int x, int y, int Grid[size + 2][size + 2], int revealgrid[size + 2][size + 2]) {
-    if (Grid[x + 1][y] == 0 || Grid[x + 1][y] == 2) {
+    if (Grid[x + 1][y] == 0 || Grid[x + 1][y] == -2) {
         return true;
     }
-    else if (Grid[x + 1][y] != 0 || Grid[x + 1][y] != 2) {
+    if (Grid[x - 1][y] == 0 || Grid[x - 1][y] == -2) {
+        return true;
+    }
+    if (Grid[x][y + 1] == 0 || Grid[x][y + 1] == -2) {
+        return true;
+    }
+    if (Grid[x][y - 1] == 0 || Grid[x][y - 1] == -2) {
+        return true;
+    }
+    if (Grid[x + 1][y] != 0 || Grid[x + 1][y] != -2) {
         return false;
     }
-
-    if (Grid[x - 1][y] == 0 || Grid[x - 1][y] == 2) {
-        return true;
-    }
-    else if (Grid[x - 1][y] != 0 || Grid[x - 1][y] != 2) {
+    if (Grid[x - 1][y] != 0 || Grid[x - 1][y] != -2) {
         return false;
     }
-
-    if (Grid[x][y + 1] == 0 || Grid[x][y + 1] == 2) {
-        return true;
-    }
-    else if (Grid[x][y + 1] != 0 || Grid[x][y + 1] != 2) {
+    if (Grid[x][y + 1] != 0 || Grid[x][y + 1] != -2) {
         return false;
     }
-
-    if (Grid[x][y - 1] == 0 || Grid[x][y - 1] == 2) {
-        return true;
-    }
-    else if (Grid[x][y - 1] != 0 || Grid[x][y - 1] != 2) {
+    if (Grid[x][y - 1] != 0 || Grid[x][y - 1] != -2) {
         return false;
     }
     return true;
@@ -246,86 +244,94 @@ int main() {
                 window.close();
             }
             if (event.type == Event::MouseButtonPressed) { // åñëè ñåé÷àñ õîä èãðîêà è îí íàæàë íà ÿ÷åéêó
-                if (event.mouseButton.button == Mouse::Left) {
-                    int x = event.mouseButton.x / cellSize;
-                    int y = event.mouseButton.y / cellSize;
+                if (islost == 0) {
+                    if (event.mouseButton.button == Mouse::Left) {
+                        int x = event.mouseButton.x / cellSize;
+                        int y = event.mouseButton.y / cellSize;
 
-                    if ((Grid[x][y] == 1
-                        || Grid[x][y] == 2
-                        || Grid[x][y] == 3
-                        || Grid[x][y] == 4
-                        || Grid[x][y] == 5
-                        || Grid[x][y] == 6
-                        || Grid[x][y] == 7
-                        || Grid[x][y] == 8
-                        || Grid[x][y] == -1) 
-                        && RevealGrid[x][y] == 0) { // óáèë
-                        RevealGrid[x][y] = 1;
-                    }
-                    else if ((Grid[x][y] == 0
-                        || Grid[x][y] == -2) 
-                        && RevealGrid[x][y] == 0) { // óáèë
-                        RevealGrid[x][y] = 1;
+                        if ((Grid[x][y] == 1
+                            || Grid[x][y] == 2
+                            || Grid[x][y] == 3
+                            || Grid[x][y] == 4
+                            || Grid[x][y] == 5
+                            || Grid[x][y] == 6
+                            || Grid[x][y] == 7
+                            || Grid[x][y] == 8) 
+                            && RevealGrid[x][y] == 0) { // óáèë
+                            RevealGrid[x][y] = 1;
+                        }
+                        else if ((Grid[x][y] == 0
+                            || Grid[x][y] == -2) 
+                            && RevealGrid[x][y] == 0) { // óáèë
+                            RevealGrid[x][y] = 1;
 
-                        if (isClear(x, y, Grid, RevealGrid) == true) {
-                            if ((Grid[x + 1][y] == 0 || Grid[x + 1][y] == -2) && (x + 1) >= 1 && (x + 1) < size + 1 && y >= 1 && y < size + 1) {
-                                RevealGrid[x + 1][y] = 1;
-                            }
-                            if ((Grid[x - 1][y] == 0 || Grid[x - 1][y] == -2) && (x - 1) >= 1 && (x - 1) < size + 1 && y >= 1 && y < size + 1) {
-                                RevealGrid[x - 1][y] = 1;
-                            }
-                            if ((Grid[x][y + 1] == 0 || Grid[x][y + 1] == -2) == 0 && x >= 1 && x < size + 1 && (y + 1) >= 1 && (y + 1) < size + 1) {
-                                RevealGrid[x][y + 1] = 1;
-                            }
-                            if ((Grid[x][y - 1] == 0 || Grid[x][y - 1] == -2) && x >= 1 && x < size + 1 && (y - 1) >= 1 && (y - 1) < size + 1) {
-                                RevealGrid[x][y - 1] = 1;
+                            if (isClear(x, y, Grid, RevealGrid) == true) {
+                                if ((Grid[x + 1][y] == 0 || Grid[x + 1][y] == -2) && (x + 1) >= 1 && (x + 1) < size + 1 && y >= 1 && y < size + 1) {
+                                    RevealGrid[x + 1][y] = 1;
+                                }
+                                if ((Grid[x - 1][y] == 0 || Grid[x - 1][y] == -2) && (x - 1) >= 1 && (x - 1) < size + 1 && y >= 1 && y < size + 1) {
+                                    RevealGrid[x - 1][y] = 1;
+                                }
+                                if ((Grid[x][y + 1] == 0 || Grid[x][y + 1] == -2) && x >= 1 && x < size + 1 && (y + 1) >= 1 && (y + 1) < size + 1) {
+                                    RevealGrid[x][y + 1] = 1;
+                                }
+                                if ((Grid[x][y - 1] == 0 || Grid[x][y - 1] == -2) && x >= 1 && x < size + 1 && (y - 1) >= 1 && (y - 1) < size + 1) {
+                                    RevealGrid[x][y - 1] = 1;
+                                }
                             }
                         }
-                    }
+                        else if (Grid[x][y] == -1 && RevealGrid[x][y] == 0) {
+                            RevealGrid[x][y] = 1;
+                            islost = 1;
+                        }
 
-                    else if (Grid[x][y] == -3) {
-                        Grid[x][y] = -3;
+                        else if (Grid[x][y] == -3) {
+                            Grid[x][y] = -3;
+                        }
+                        else if (Grid[x][y] == 1 && RevealGrid[x][y] == 1) {
+                            Grid[x][y] = 1;
+                        }
+                        else if (Grid[x][y] == 2 && RevealGrid[x][y] == 1) {
+                            Grid[x][y] = 2;
+                        }
+                        else if (Grid[x][y] == 3 && RevealGrid[x][y] == 1) {
+                            Grid[x][y] = 3;
+                        }
+                        else if (Grid[x][y] == 4 && RevealGrid[x][y] == 1) {
+                            Grid[x][y] = 4;
+                        }
+                        else if (Grid[x][y] == 5 && RevealGrid[x][y] == 1) {
+                            Grid[x][y] = 5;
+                        }
+                        else if (Grid[x][y] == 6 && RevealGrid[x][y] == 1) {
+                            Grid[x][y] = 6;
+                        }
+                        else if (Grid[x][y] == 7 && RevealGrid[x][y] == 1) {
+                            Grid[x][y] = 7;
+                        }
+                        else if (Grid[x][y] == 8 && RevealGrid[x][y] == 1) {
+                            Grid[x][y] = 8;
+                        }
+                        else if (Grid[x][y] == -1 && RevealGrid[x][y] == 1) {
+                            Grid[x][y] = -1;
+                        }
+                        else if (RevealGrid[x][y] == 2) {
+                            Grid[x][y] = -1;
+                        }
                     }
-                    else if (Grid[x][y] == 1 && RevealGrid[x][y] == 1) {
-                        Grid[x][y] = 1;
-                    }
-                    else if (Grid[x][y] == 2 && RevealGrid[x][y] == 1) {
-                        Grid[x][y] = 2;
-                    }
-                    else if (Grid[x][y] == 3 && RevealGrid[x][y] == 1) {
-                        Grid[x][y] = 3;
-                    }
-                    else if (Grid[x][y] == 4 && RevealGrid[x][y] == 1) {
-                        Grid[x][y] = 4;
-                    }
-                    else if (Grid[x][y] == 5 && RevealGrid[x][y] == 1) {
-                        Grid[x][y] = 5;
-                    }
-                    else if (Grid[x][y] == 6 && RevealGrid[x][y] == 1) {
-                        Grid[x][y] = 6;
-                    }
-                    else if (Grid[x][y] == 7 && RevealGrid[x][y] == 1) {
-                        Grid[x][y] = 7;
-                    }
-                    else if (Grid[x][y] == 8 && RevealGrid[x][y] == 1) {
-                        Grid[x][y] = 8;
-                    }
-                    else if (Grid[x][y] == -1 && RevealGrid[x][y] == 1) {
-                        Grid[x][y] = -1;
-                    }
-                    else if (RevealGrid[x][y] == 2) {
-                        Grid[x][y] = -1;
+                    else if (event.mouseButton.button == Mouse::Right) {
+                        int x = event.mouseButton.x / cellSize;
+                        int y = event.mouseButton.y / cellSize;
+                        if (RevealGrid[x][y] == 0) {
+                            RevealGrid[x][y] = 2;
+                        }
+                        else if (RevealGrid[x][y] == 2) {
+                            RevealGrid[x][y] = 0;
+                        }
                     }
                 }
-                else if (event.mouseButton.button == Mouse::Right) {
-                    int x = event.mouseButton.x / cellSize;
-                    int y = event.mouseButton.y / cellSize;
-                    if (RevealGrid[x][y] == 0) {
-                        RevealGrid[x][y] = 2;
-                    }
-                    else if (RevealGrid[x][y] == 2) {
-                        RevealGrid[x][y] = 0;
-                    }
+                else if (islost == 1) {
+                    window.close();
                 }
             }
         }
