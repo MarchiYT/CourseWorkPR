@@ -10,7 +10,9 @@ const int size = 10; // ðàçìåð ïîëÿ
 const int numBombs = 10;
 int win = 0;
 bool islost = 0;
+int face = 1;
 
+Texture border;
 Texture revealed;
 Texture hidden;
 Texture mine;
@@ -23,6 +25,9 @@ Texture five;
 Texture six;
 Texture seven;
 Texture eight;
+Texture face_happy;
+Texture face_lose;
+Texture face_win;
 
 int Grid[size + 2][size + 2]; // èãðîâîå ïîëå êîìïüþòåðà
 int RevealGrid[size + 2][size + 2];
@@ -35,7 +40,16 @@ void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid
         for (int y = 0; y < size + 2; y++) {
             cell.setPosition(x * cellSize, y * cellSize);
             if (Grid[x][y] == -3) { // ïîïàäàíèå
-                cell.setTexture(hidden);
+                cell.setTexture(border);
+            }
+            else if (Grid[x][y] == -4 && win != 10 && islost != 1) { // ïîïàäàíèå
+                cell.setTexture(face_happy);
+            }
+            else if (Grid[x][y] == -4 && win == 10 && islost != 1) { // ïîïàäàíèå
+                cell.setTexture(face_win);
+            }
+            else if (Grid[x][y] == -4 && win != 10 && islost == 1) { // ïîïàäàíèå
+                cell.setTexture(face_lose);
             }
             else if ((Grid[x][y] == -2 || Grid[x][y] == 0) && revealgrid[x][y] == 1) { // ïîïàäàíèå
                 cell.setTexture(revealed);
@@ -210,6 +224,18 @@ int main() {
     //Texture flag;
     flag.loadFromFile("../images/flag.png");
 
+    //Texture border;
+    border.loadFromFile("../images/border.png");
+
+    //Texture face_happy;
+    face_happy.loadFromFile("../images/face_happy.png");
+
+    //Texture face_lose;
+    face_lose.loadFromFile("../images/face_lose.png");
+
+    //Texture face_win;
+    face_win.loadFromFile("../images/face_win.png");
+
 
 
     // èíèöèàëèçèðóåì ïîëå èãðîêà è êîìïüþòåðà
@@ -231,6 +257,8 @@ int main() {
             RevealGrid[x][y] = 0;
         }
     }
+
+    Grid[0][0] = -4;
 
     // ðàíäîìíî ðàçìåùàåì êîðàáëè êîìïüþòåðà
     srand(time(NULL));
@@ -338,7 +366,34 @@ int main() {
                 }
 
                 else if (islost == 1) {
-                    window.close();
+                    if (event.type == Event::MouseButtonPressed) {
+                        if (event.mouseButton.x >= 0 && event.mouseButton.x <= cellSize && event.mouseButton.y >= 0 && event.mouseButton.y <= cellSize) {
+                            for (int x = 1; x < size + 1; x++) {
+                                for (int y = 1; y < size + 1; y++) {
+                                    Grid[x][y] = 0;
+                                }
+                            }
+                            for (int x = 0; x < size + 2; x++) {
+                                Grid[x][0] = -3;
+                                Grid[x][size + 1] = -3;
+                            }
+                            for (int y = 0; y < size + 2; y++) {
+                                Grid[0][y] = -3;
+                                Grid[size + 1][y] = -3;
+                            }
+                            for (int x = 1; x < size + 1; x++) {
+                                for (int y = 1; y < size + 1; y++) {
+                                    RevealGrid[x][y] = 0;
+                                }
+                            }
+
+                            Grid[0][0] = -4;
+                            srand(time(NULL));
+                            Bomb_placement(Grid, size, numBombs);
+                            islost = 0;
+                            win = 0;
+                        }
+                    }
                 }
             }
         }
@@ -357,7 +412,33 @@ int main() {
             }
         }
         if (win == 10 && (openCells == (size*size-numBombs))) {
-            window.close();
+            if (event.type == Event::MouseButtonPressed) {
+                if (event.mouseButton.x >= 0 && event.mouseButton.x <= cellSize && event.mouseButton.y >= 0 && event.mouseButton.y <= cellSize) {
+                    for (int x = 1; x < size + 1; x++) {
+                        for (int y = 1; y < size + 1; y++) {
+                            Grid[x][y] = 0;
+                        }
+                    }
+                    for (int x = 0; x < size + 2; x++) {
+                        Grid[x][0] = -3;
+                        Grid[x][size + 1] = -3;
+                    }
+                    for (int y = 0; y < size + 2; y++) {
+                        Grid[0][y] = -3;
+                        Grid[size + 1][y] = -3;
+                    }
+                    for (int x = 1; x < size + 1; x++) {
+                        for (int y = 1; y < size + 1; y++) {
+                            RevealGrid[x][y] = 0;
+                        }
+                    }
+
+                    Grid[0][0] = -4;
+                    srand(time(NULL));
+                    Bomb_placement(Grid, size, numBombs);
+                    win = 0;
+                }
+            }
         }
 
     }
