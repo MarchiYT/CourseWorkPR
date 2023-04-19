@@ -43,7 +43,7 @@ void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid
             if (Grid[x][y] == -3) { // ïîïàäàíèå
                 cell.setTexture(border);
             }
-            else if (Grid[x][y] == -4 && islost != 1 && (win != 10 || openCells != (size * size - numBombs)) { // ïîïàäàíèå
+            else if (Grid[x][y] == -4 && islost != 1 && (win != 10 || openCells != (size * size - numBombs))) { // ïîïàäàíèå
                 cell.setTexture(face_happy);
             }
             else if (Grid[x][y] == -4 && win == 10 && islost != 1 && openCells == (size * size - numBombs)) { // ïîïàäàíèå
