@@ -7,7 +7,7 @@ using namespace sf;
 
 const int cellSize = 32; // ðàçìåð ÿ÷ååê
 const int size = 10; // ðàçìåð ïîëÿ
-const int numBombs = 3;
+const int numBombs = 10;
 int win = 0;
 bool islost = 0;
 int face = 1;
@@ -312,6 +312,12 @@ int main() {
                             win++;
                         }
                         else if (Grid[x][y] == -1 && RevealGrid[x][y] == 2) {
+                            win--;
+                        }
+                        else if (Grid[x][y] != -1 && RevealGrid[x][y] == 2) {
+                            win++;
+                        }
+                        else if (Grid[x][y] != -1 && RevealGrid[x][y] == 0) {
                             win--;
                         }
                         if (RevealGrid[x][y] == 0) {
