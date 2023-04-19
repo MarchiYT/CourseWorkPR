@@ -244,7 +244,7 @@ int main() {
             }
             if (event.type == Event::MouseButtonPressed) { // åñëè ñåé÷àñ õîä èãðîêà è îí íàæàë íà ÿ÷åéêó
                 if (islost == 0) {
-                    if (event.mouseButton.button == Mouse::Left) {
+                    if (event.mouseButton.button == Mouse::Left && event.mouseButton.x >= cellSize && event.mouseButton.x < 11 * cellSize && event.mouseButton.y >= cellSize && event.mouseButton.y < 11 * cellSize) {
                         int x = event.mouseButton.x / cellSize;
                         int y = event.mouseButton.y / cellSize;
 
