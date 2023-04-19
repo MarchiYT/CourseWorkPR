@@ -33,7 +33,7 @@ Texture face_win;
 int Grid[size + 2][size + 2]; // èãðîâîå ïîëå êîìïüþòåðà
 int RevealGrid[size + 2][size + 2];
 
-void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid[size + 2][size + 2]) {
+void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid[size + 2][size + 2], int openCells) {
     Sprite cell;
     cell.setPosition(sf::Vector2f(cellSize, cellSize));
 
@@ -43,10 +43,10 @@ void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid
             if (Grid[x][y] == -3) { // ïîïàäàíèå
                 cell.setTexture(border);
             }
-            else if (Grid[x][y] == -4 && win != 10 && islost != 1) { // ïîïàäàíèå
+            else if (Grid[x][y] == -4 && islost != 1 && (win != 10 || openCells != (size * size - numBombs)) { // ïîïàäàíèå
                 cell.setTexture(face_happy);
             }
-            else if (Grid[x][y] == -4 && win == 10 && islost != 1) { // ïîïàäàíèå
+            else if (Grid[x][y] == -4 && win == 10 && islost != 1 && openCells == (size * size - numBombs)) { // ïîïàäàíèå
                 cell.setTexture(face_win);
             }
             else if (Grid[x][y] == -4 && win != 10 && islost == 1) { // ïîïàäàíèå
@@ -396,14 +396,6 @@ int main() {
             }
         }
 
-
-
-        window.clear(Color::White);
-
-        drawGrid(window, Grid, RevealGrid); // ðèñóåì ïîëå èãðîêà
-
-        window.display();
-
         int openCells = 0;
         for (int x = 1; x < size + 1; x++) {
             for (int y = 1; y < size + 1; y++) {
@@ -412,6 +404,13 @@ int main() {
                 }
             }
         }
+
+        window.clear(Color::White);
+
+        drawGrid(window, Grid, RevealGrid, openCells); // ðèñóåì ïîëå èãðîêà
+
+        window.display();
+
         if (win == 10 && (openCells == (size*size-numBombs))) {
             if (event.type == Event::MouseButtonPressed) {
                 if (event.mouseButton.x >= 0 && event.mouseButton.x <= cellSize && event.mouseButton.y >= 0 && event.mouseButton.y <= cellSize) {
