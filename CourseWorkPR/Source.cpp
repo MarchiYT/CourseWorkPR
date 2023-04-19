@@ -155,34 +155,6 @@ void Bomb_placement(int Grid[size + 2][size + 2],int size, int numBombs) {
     }
 }
 
-bool isClear(int x, int y, int Grid[size + 2][size + 2], int revealgrid[size + 2][size + 2]) {
-    if (Grid[x + 1][y] == 0 || Grid[x + 1][y] == -2) {
-        return true;
-    }
-    if (Grid[x - 1][y] == 0 || Grid[x - 1][y] == -2) {
-        return true;
-    }
-    if (Grid[x][y + 1] == 0 || Grid[x][y + 1] == -2) {
-        return true;
-    }
-    if (Grid[x][y - 1] == 0 || Grid[x][y - 1] == -2) {
-        return true;
-    }
-    if (Grid[x + 1][y] != 0 || Grid[x + 1][y] != -2) {
-        return false;
-    }
-    if (Grid[x - 1][y] != 0 || Grid[x - 1][y] != -2) {
-        return false;
-    }
-    if (Grid[x][y + 1] != 0 || Grid[x][y + 1] != -2) {
-        return false;
-    }
-    if (Grid[x][y - 1] != 0 || Grid[x][y - 1] != -2) {
-        return false;
-    }
-    return true;
-}
-
 int main() {
     RenderWindow window(VideoMode((size + 2) * cellSize, (size + 2) * cellSize), "Minesweeper", Style::Titlebar | Style::Close);
     window.setFramerateLimit(60);
@@ -293,20 +265,6 @@ int main() {
                             && RevealGrid[x][y] == 0) { // óáèë
                             RevealGrid[x][y] = 1;
 
-                            if (isClear(x, y, Grid, RevealGrid) == true) {
-                                if ((Grid[x + 1][y] == 0 || Grid[x + 1][y] == -2) && (x + 1) >= 1 && (x + 1) < size + 1 && y >= 1 && y < size + 1) {
-                                    RevealGrid[x + 1][y] = 1;
-                                }
-                                if ((Grid[x - 1][y] == 0 || Grid[x - 1][y] == -2) && (x - 1) >= 1 && (x - 1) < size + 1 && y >= 1 && y < size + 1) {
-                                    RevealGrid[x - 1][y] = 1;
-                                }
-                                if ((Grid[x][y + 1] == 0 || Grid[x][y + 1] == -2) && x >= 1 && x < size + 1 && (y + 1) >= 1 && (y + 1) < size + 1) {
-                                    RevealGrid[x][y + 1] = 1;
-                                }
-                                if ((Grid[x][y - 1] == 0 || Grid[x][y - 1] == -2) && x >= 1 && x < size + 1 && (y - 1) >= 1 && (y - 1) < size + 1) {
-                                    RevealGrid[x][y - 1] = 1;
-                                }
-                            }
                         }
                         else if (Grid[x][y] == -1 && RevealGrid[x][y] == 0) {
                             RevealGrid[x][y] = 1;
@@ -397,6 +355,31 @@ int main() {
                 }
             }
         }
+
+        for (int i = 0; i < size * size; i++) {
+            for (int x = 1; x < size + 1; x++) {
+                for (int y = 1; y < size + 1; y++) {
+                    if ((Grid[x][y] == 0 || Grid[x][y] == -2) && RevealGrid[x][y] == 1) {
+
+                        if ((Grid[x + 1][y] == 0 || Grid[x + 1][y] == -2) && (x + 1) >= 1 && (x + 1) < size + 1 && y >= 1 && y < size + 1 && RevealGrid[x + 1][y] != 1) {
+                            RevealGrid[x + 1][y] = 1;
+                        }
+                        if ((Grid[x - 1][y] == 0 || Grid[x - 1][y] == -2) && (x - 1) >= 1 && (x - 1) < size + 1 && y >= 1 && y < size + 1 && RevealGrid[x - 1][y] != 1) {
+                            RevealGrid[x - 1][y] = 1;
+                        }
+                        if ((Grid[x][y + 1] == 0 || Grid[x][y + 1] == -2) && x >= 1 && x < size + 1 && (y + 1) >= 1 && (y + 1) < size + 1 && RevealGrid[x][y + 1] != 1) {
+                            RevealGrid[x][y + 1] = 1;
+                        }
+                        if ((Grid[x][y - 1] == 0 || Grid[x][y - 1] == -2) && x >= 1 && x < size + 1 && (y - 1) >= 1 && (y - 1) < size + 1 && RevealGrid[x][y - 1] != 1) {
+                            RevealGrid[x][y - 1] = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+
+
         window.clear(Color::White);
 
         drawGrid(window, Grid, RevealGrid); // ðèñóåì ïîëå èãðîêà
@@ -440,6 +423,7 @@ int main() {
                 }
             }
         }
+        openCells = 0;
 
     }
 
