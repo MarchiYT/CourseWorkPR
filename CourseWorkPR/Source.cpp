@@ -9,66 +9,64 @@ const int cellSize = 50; // ðàçìåð ÿ÷ååê
 const int size = 10; // ðàçìåð ïîëÿ
 const int numBombs = 10;
 int win = 0;
-int lose = 0;
+
+Texture revealed;
+Texture hidden;
+Texture mine;
+Texture flag;
+Texture one;
+Texture two;
+Texture three;
+Texture four;
+Texture five;
+Texture six;
+Texture seven;
+Texture eight;
 
 int Grid[size + 2][size + 2]; // èãðîâîå ïîëå êîìïüþòåðà
 
-bool isPlayerTurn = true; // õîä èãðîêà
-
 void drawGrid(RenderWindow& window, int grid[size + 2][size + 2]) {
-    RectangleShape cell(Vector2f(cellSize, cellSize));
-    cell.setOutlineThickness(1.f);
+    Sprite cell;
+    cell.setPosition(sf::Vector2f(cellSize, cellSize));
 
     for (int x = 0; x < size + 2; x++) {
         for (int y = 0; y < size + 2; y++) {
             cell.setPosition(x * cellSize, y * cellSize);
             if (Grid[x][y] == -3) { // ïîïàäàíèå
-                cell.setFillColor(Color::Magenta);
-                cell.setOutlineColor(Color::Magenta);
+                cell.setTexture(revealed);
             }
             else if (Grid[x][y] == -2) { // ïîïàäàíèå
-                cell.setFillColor(Color::White);
-                cell.setOutlineColor(Color::White);
+                cell.setTexture(hidden);
             }
             else if (Grid[x][y] == -1) { // ïîïàäàíèå
-                cell.setFillColor(Color::Black);
-                cell.setOutlineColor(Color::Black);
+                cell.setTexture(mine);
             }
             else if (Grid[x][y] == 0) { // íåîòêðûòàÿ ÿ÷åéêà
-                cell.setFillColor(Color::Yellow);
-                cell.setOutlineColor(Color::Black);
+                cell.setTexture(hidden);
             }
             else if (Grid[x][y] == 1) { // ïàëóáà êîðàáëÿ
-                cell.setFillColor(Color::Yellow);
-                cell.setOutlineColor(Color::Black);
+                cell.setTexture(one);
             }
             else if (Grid[x][y] == 2) { // ïðîìàõ
-                cell.setFillColor(Color::Yellow);
-                cell.setOutlineColor(Color::Black);
+                cell.setTexture(two);
             }
             else if (Grid[x][y] == 3) { // ïðîìàõ
-                cell.setFillColor(Color::Yellow);
-                cell.setOutlineColor(Color::Black);
+                cell.setTexture(three);
             }
             else if (Grid[x][y] == 4) { // ïðîìàõ
-                cell.setFillColor(Color::Yellow);
-                cell.setOutlineColor(Color::Black);
+                cell.setTexture(four);
             }
             else if (Grid[x][y] == 5) { // ïðîìàõ
-                cell.setFillColor(Color::Yellow);
-                cell.setOutlineColor(Color::Black);
+                cell.setTexture(five);
             }
             else if (Grid[x][y] == 6) { // ïðîìàõ
-                cell.setFillColor(Color::Yellow);
-                cell.setOutlineColor(Color::Black);
+                cell.setTexture(six);
             }
             else if (Grid[x][y] == 7) { // ïðîìàõ
-                cell.setFillColor(Color::Yellow);
-                cell.setOutlineColor(Color::Black);
+                cell.setTexture(seven);
             }
             else if (Grid[x][y] == 8) { // ïðîìàõ
-                cell.setFillColor(Color::Yellow);
-                cell.setOutlineColor(Color::Black);
+                cell.setTexture(eight);
             }
             window.draw(cell);
         }
@@ -228,6 +226,46 @@ void timer() {
 int main() {
     RenderWindow window(VideoMode((size + 2) * cellSize, (size + 2) * cellSize), "Minesweeper", Style::Titlebar | Style::Close);
     window.setFramerateLimit(60);
+
+
+    //Texture one;
+    one.loadFromFile("E:/Projects/CourseWorkPR/images/number_1.png");
+
+    //Texture two;
+    two.loadFromFile("E:/Projects/CourseWorkPR/images/number_2.png");
+
+    //Texture three;
+    three.loadFromFile("E:/Projects/CourseWorkPR/images/number_3.png");
+
+    //Texture four;
+    four.loadFromFile("E:/Projects/CourseWorkPR/images/number_4.png");
+
+    //Texture five;
+    five.loadFromFile("E:/Projects/CourseWorkPR/images/number_5.png");
+
+    //Texture six;
+    six.loadFromFile("E:/Projects/CourseWorkPR/images/number_6.png");
+
+    //Texture seven;
+    seven.loadFromFile("E:/Projects/CourseWorkPR/images/number_7.png");
+
+    //Texture eight;
+    eight.loadFromFile("E:/Projects/CourseWorkPR/images/number_8.png");
+
+    //Texture hidden;
+    hidden.loadFromFile("E:/Projects/CourseWorkPR/images/tile_hidden.png");
+
+    //Texture revealed;
+    revealed.loadFromFile("E:/Projects/CourseWorkPR/images/tile_revealed.png");
+
+    //Texture mine;
+    mine.loadFromFile("E:/Projects/CourseWorkPR/images/mine.png");
+
+    //Texture flag;
+    flag.loadFromFile("E:/Projects/CourseWorkPR/images/flag.png");
+
+
+
     // èíèöèàëèçèðóåì ïîëå èãðîêà è êîìïüþòåðà
     for (int x = 1; x < size + 1; x++) {
         for (int y = 1; y < size + 1; y++) {
