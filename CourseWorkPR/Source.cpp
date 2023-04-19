@@ -244,7 +244,7 @@ int main() {
             }
             if (event.type == Event::MouseButtonPressed) { // åñëè ñåé÷àñ õîä èãðîêà è îí íàæàë íà ÿ÷åéêó
                 if (islost == 0) {
-                    if (event.mouseButton.button == Mouse::Left && event.mouseButton.x >= cellSize && event.mouseButton.x < 11 * cellSize && event.mouseButton.y >= cellSize && event.mouseButton.y < 11 * cellSize) {
+                    if (event.mouseButton.button == Mouse::Left && event.mouseButton.x >= cellSize && event.mouseButton.x < (size + 1) * cellSize && event.mouseButton.y >= cellSize && event.mouseButton.y < (size + 1) * cellSize) {
                         int x = event.mouseButton.x / cellSize;
                         int y = event.mouseButton.y / cellSize;
 
@@ -411,7 +411,7 @@ int main() {
 
         window.display();
 
-        if (win == 10 && (openCells == (size*size-numBombs))) {
+        if (win == size && (openCells == (size*size-numBombs))) {
             if (event.type == Event::MouseButtonPressed) {
                 if (event.mouseButton.x >= 0 && event.mouseButton.x <= cellSize && event.mouseButton.y >= 0 && event.mouseButton.y <= cellSize) {
                     for (int x = 1; x < size + 1; x++) {
