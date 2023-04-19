@@ -5,7 +5,7 @@
 
 using namespace sf;
 
-const int cellSize = 50; // ðàçìåð ÿ÷ååê
+const int cellSize = 32; // ðàçìåð ÿ÷ååê
 const int size = 10; // ðàçìåð ïîëÿ
 const int numBombs = 10;
 int win = 0;
@@ -24,8 +24,9 @@ Texture seven;
 Texture eight;
 
 int Grid[size + 2][size + 2]; // èãðîâîå ïîëå êîìïüþòåðà
+bool RevealGrid[size + 2][size + 2];
 
-void drawGrid(RenderWindow& window, int grid[size + 2][size + 2]) {
+void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], bool revealgrid[size + 2][size + 2]) {
     Sprite cell;
     cell.setPosition(sf::Vector2f(cellSize, cellSize));
 
@@ -33,39 +34,49 @@ void drawGrid(RenderWindow& window, int grid[size + 2][size + 2]) {
         for (int y = 0; y < size + 2; y++) {
             cell.setPosition(x * cellSize, y * cellSize);
             if (Grid[x][y] == -3) { // ïîïàäàíèå
+                cell.setTexture(hidden);
+            }
+            else if ((Grid[x][y] == -2 || Grid[x][y] == 0) && revealgrid[x][y] == 1) { // ïîïàäàíèå
                 cell.setTexture(revealed);
             }
-            else if (Grid[x][y] == -2) { // ïîïàäàíèå
-                cell.setTexture(hidden);
-            }
-            else if (Grid[x][y] == -1) { // ïîïàäàíèå
+            else if ((Grid[x][y] == -1) && revealgrid[x][y] == 1) { // ïîïàäàíèå
                 cell.setTexture(mine);
             }
-            else if (Grid[x][y] == 0) { // íåîòêðûòàÿ ÿ÷åéêà
+            else if (revealgrid[x][y] == 0 && (Grid[x][y] == -1 
+                                            || Grid[x][y] == 1 
+                                            || Grid[x][y] == 2 
+                                            || Grid[x][y] == 3 
+                                            || Grid[x][y] == 4 
+                                            || Grid[x][y] == 5 
+                                            || Grid[x][y] == 6 
+                                            || Grid[x][y] == 7 
+                                            || Grid[x][y] == 8
+                                            || Grid[x][y] == 0 
+                                            || Grid[x][y] == -2)) { // ïîïàäàíèå
                 cell.setTexture(hidden);
             }
-            else if (Grid[x][y] == 1) { // ïàëóáà êîðàáëÿ
+            else if (Grid[x][y] == 1 && revealgrid[x][y] == 1) { // ïàëóáà êîðàáëÿ
                 cell.setTexture(one);
             }
-            else if (Grid[x][y] == 2) { // ïðîìàõ
+            else if (Grid[x][y] == 2 && revealgrid[x][y] == 1) { // ïðîìàõ
                 cell.setTexture(two);
             }
-            else if (Grid[x][y] == 3) { // ïðîìàõ
+            else if (Grid[x][y] == 3 && revealgrid[x][y] == 1) { // ïðîìàõ
                 cell.setTexture(three);
             }
-            else if (Grid[x][y] == 4) { // ïðîìàõ
+            else if (Grid[x][y] == 4 && revealgrid[x][y] == 1) { // ïðîìàõ
                 cell.setTexture(four);
             }
-            else if (Grid[x][y] == 5) { // ïðîìàõ
+            else if (Grid[x][y] == 5 && revealgrid[x][y] == 1) { // ïðîìàõ
                 cell.setTexture(five);
             }
-            else if (Grid[x][y] == 6) { // ïðîìàõ
+            else if (Grid[x][y] == 6 && revealgrid[x][y] == 1) { // ïðîìàõ
                 cell.setTexture(six);
             }
-            else if (Grid[x][y] == 7) { // ïðîìàõ
+            else if (Grid[x][y] == 7 && revealgrid[x][y] == 1) { // ïðîìàõ
                 cell.setTexture(seven);
             }
-            else if (Grid[x][y] == 8) { // ïðîìàõ
+            else if (Grid[x][y] == 8 && revealgrid[x][y] == 1) { // ïðîìàõ
                 cell.setTexture(eight);
             }
             window.draw(cell);
@@ -93,7 +104,7 @@ void Bomb_placement(int Grid[size + 2][size + 2],int size, int numBombs) {
     // Заполняем оставшиеся ячейки значениями, указывающими на количество бомб в соседних клетках
     for (int row = 1; row < size + 1; row++) {
         for (int col = 1; col < size + 1; col++) {
-            if (Grid[row][col] == -1 && Grid[row][col] != -2 && Grid[row][col] != -3) {
+            if (Grid[row][col] == -1 && Grid[row][col] != -3) {
                 continue;
             }
             int numAdjacentBombs = 0;
@@ -126,102 +137,97 @@ void Bomb_placement(int Grid[size + 2][size + 2],int size, int numBombs) {
     }
 }
 
-bool isClear(int x, int y, int Grid[size + 2][size + 2], int size) {
-    if (Grid[x + 1][y] != 1) {
-        if (Grid[x + 1][y] == 3 || Grid[x + 1][y] == 4) {
-            if (Grid[x + 2][y] != 1) {
-                if (Grid[x + 2][y] == 3 || Grid[x + 2][y] == 4) {
-                    if (Grid[x + 3][y] != 1) {
-                        if (Grid[x + 3][y] == 3 || Grid[x + 3][y] == 4) {
-                            return true;
-                        }
-                    }
-                    else if (Grid[x + 3][y] == 1) {
-                        return false;
-                    }
-                }
-            }
-            else if (Grid[x + 2][y] == 1) {
-                return false;
-            }
-        }
-    }
-    else if (Grid[x + 1][y] == 1) {
-        return false;
-    }
-    if (Grid[x - 1][y] != 1) {
-        if (Grid[x - 1][y] == 3 || Grid[x - 1][y] == 4) {
-            if (Grid[x - 2][y] != 1) {
-                if (Grid[x - 2][y] == 3 || Grid[x - 2][y] == 4) {
-                    if (Grid[x - 3][y] != 1) {
-                        if (Grid[x - 3][y] == 3 || Grid[x - 3][y] == 4) {
-                            return true;
-                        }
-                    }
-                    else if (Grid[x - 3][y] == 1) {
-                        return false;
-                    }
-                }
-            }
-            else if (Grid[x - 2][y] == 1) {
-                return false;
-            }
-        }
-    }
-    else if (Grid[x - 1][y] == 1) {
-        return false;
-    }
-    if (Grid[x][y + 1] != 1) {
-        if (Grid[x][y + 1] == 3 || Grid[x][y + 1] == 4) {
-            if (Grid[x][y + 2] != 1) {
-                if (Grid[x][y + 2] == 3 || Grid[x][y + 2] == 4) {
-                    if (Grid[x][y + 3] != 1) {
-                        if (Grid[x][y + 3] == 3 || Grid[x][y + 3] == 4) {
-                            return true;
-                        }
-                    }
-                    else if (Grid[x][y + 3] == 1) {
-                        return false;
-                    }
-                }
-            }
-            else if (Grid[x][y + 2] == 1) {
-                return false;
-            }
-        }
-    }
-    else if (Grid[x][y + 1] == 1) {
-        return false;
-    }
-    if (Grid[x][y - 1] != 1) {
-        if (Grid[x][y - 1] == 3 || Grid[x][y - 1] == 4) {
-            if (Grid[x][y - 2] != 1) {
-                if (Grid[x][y - 2] == 3 || Grid[x][y - 2] == 4) {
-                    if (Grid[x][y - 3] != 1) {
-                        if (Grid[x][y - 3] == 3 || Grid[x][y - 3] == 4) {
-                            return true;
-                        }
-                    }
-                    else if (Grid[x][y - 3] == 1) {
-                        return false;
-                    }
-                }
-            }
-            else if (Grid[x][y - 2] == 1) {
-                return false;
-            }
-        }
-    }
-    else if (Grid[x][y - 1] == 1) {
-        return false;
-    }
-    return true;
-}
-
-void timer() {
-    clock_t start_time = clock(); // Ïîëó÷åíèå òåêóùåãî âðåìåíè
-    while (clock() < start_time + 0.5 * CLOCKS_PER_SEC) {} // Îæèäàíèå 2 ñåêóíä
-}
+//bool isClear(int x, int y, int Grid[size + 2][size + 2], int size) {
+//    if (Grid[x + 1][y] != 1) {
+//        if (Grid[x + 1][y] == 3 || Grid[x + 1][y] == 4) {
+//            if (Grid[x + 2][y] != 1) {
+//                if (Grid[x + 2][y] == 3 || Grid[x + 2][y] == 4) {
+//                    if (Grid[x + 3][y] != 1) {
+//                        if (Grid[x + 3][y] == 3 || Grid[x + 3][y] == 4) {
+//                            return true;
+//                        }
+//                    }
+//                    else if (Grid[x + 3][y] == 1) {
+//                        return false;
+//                    }
+//                }
+//            }
+//            else if (Grid[x + 2][y] == 1) {
+//                return false;
+//            }
+//        }
+//    }
+//    else if (Grid[x + 1][y] == 1) {
+//        return false;
+//    }
+//    if (Grid[x - 1][y] != 1) {
+//        if (Grid[x - 1][y] == 3 || Grid[x - 1][y] == 4) {
+//            if (Grid[x - 2][y] != 1) {
+//                if (Grid[x - 2][y] == 3 || Grid[x - 2][y] == 4) {
+//                    if (Grid[x - 3][y] != 1) {
+//                        if (Grid[x - 3][y] == 3 || Grid[x - 3][y] == 4) {
+//                            return true;
+//                        }
+//                    }
+//                    else if (Grid[x - 3][y] == 1) {
+//                        return false;
+//                    }
+//                }
+//            }
+//            else if (Grid[x - 2][y] == 1) {
+//                return false;
+//            }
+//        }
+//    }
+//    else if (Grid[x - 1][y] == 1) {
+//        return false;
+//    }
+//    if (Grid[x][y + 1] != 1) {
+//        if (Grid[x][y + 1] == 3 || Grid[x][y + 1] == 4) {
+//            if (Grid[x][y + 2] != 1) {
+//                if (Grid[x][y + 2] == 3 || Grid[x][y + 2] == 4) {
+//                    if (Grid[x][y + 3] != 1) {
+//                        if (Grid[x][y + 3] == 3 || Grid[x][y + 3] == 4) {
+//                            return true;
+//                        }
+//                    }
+//                    else if (Grid[x][y + 3] == 1) {
+//                        return false;
+//                    }
+//                }
+//            }
+//            else if (Grid[x][y + 2] == 1) {
+//                return false;
+//            }
+//        }
+//    }
+//    else if (Grid[x][y + 1] == 1) {
+//        return false;
+//    }
+//    if (Grid[x][y - 1] != 1) {
+//        if (Grid[x][y - 1] == 3 || Grid[x][y - 1] == 4) {
+//            if (Grid[x][y - 2] != 1) {
+//                if (Grid[x][y - 2] == 3 || Grid[x][y - 2] == 4) {
+//                    if (Grid[x][y - 3] != 1) {
+//                        if (Grid[x][y - 3] == 3 || Grid[x][y - 3] == 4) {
+//                            return true;
+//                        }
+//                    }
+//                    else if (Grid[x][y - 3] == 1) {
+//                        return false;
+//                    }
+//                }
+//            }
+//            else if (Grid[x][y - 2] == 1) {
+//                return false;
+//            }
+//        }
+//    }
+//    else if (Grid[x][y - 1] == 1) {
+//        return false;
+//    }
+//    return true;
+//}
 
 int main() {
     RenderWindow window(VideoMode((size + 2) * cellSize, (size + 2) * cellSize), "Minesweeper", Style::Titlebar | Style::Close);
@@ -229,40 +235,40 @@ int main() {
 
 
     //Texture one;
-    one.loadFromFile("E:/Projects/CourseWorkPR/images/number_1.png");
+    one.loadFromFile("../images/number_1.png");
 
     //Texture two;
-    two.loadFromFile("E:/Projects/CourseWorkPR/images/number_2.png");
+    two.loadFromFile("../images/number_2.png");
 
     //Texture three;
-    three.loadFromFile("E:/Projects/CourseWorkPR/images/number_3.png");
+    three.loadFromFile("../images/number_3.png");
 
     //Texture four;
-    four.loadFromFile("E:/Projects/CourseWorkPR/images/number_4.png");
+    four.loadFromFile("../images/number_4.png");
 
     //Texture five;
-    five.loadFromFile("E:/Projects/CourseWorkPR/images/number_5.png");
+    five.loadFromFile("../images/number_5.png");
 
     //Texture six;
-    six.loadFromFile("E:/Projects/CourseWorkPR/images/number_6.png");
+    six.loadFromFile("../images/number_6.png");
 
     //Texture seven;
-    seven.loadFromFile("E:/Projects/CourseWorkPR/images/number_7.png");
+    seven.loadFromFile("../images/number_7.png");
 
     //Texture eight;
-    eight.loadFromFile("E:/Projects/CourseWorkPR/images/number_8.png");
+    eight.loadFromFile("../images/number_8.png");
 
     //Texture hidden;
-    hidden.loadFromFile("E:/Projects/CourseWorkPR/images/tile_hidden.png");
+    hidden.loadFromFile("../images/tile_hidden.png");
 
     //Texture revealed;
-    revealed.loadFromFile("E:/Projects/CourseWorkPR/images/tile_revealed.png");
+    revealed.loadFromFile("../images/tile_revealed.png");
 
     //Texture mine;
-    mine.loadFromFile("E:/Projects/CourseWorkPR/images/mine.png");
+    mine.loadFromFile("../images/mine.png");
 
     //Texture flag;
-    flag.loadFromFile("E:/Projects/CourseWorkPR/images/flag.png");
+    flag.loadFromFile("../images/flag.png");
 
 
 
@@ -280,6 +286,11 @@ int main() {
         Grid[0][y] = -3;
         Grid[size + 1][y] = -3;
     }
+    for (int x = 1; x < size + 1; x++) {
+        for (int y = 1; y < size + 1; y++) {
+            RevealGrid[x][y] = 0;
+        }
+    }
 
     // ðàíäîìíî ðàçìåùàåì êîðàáëè êîìïüþòåðà
     srand(time(NULL));
@@ -296,26 +307,55 @@ int main() {
                 int x = event.mouseButton.x / cellSize;
                 int y = event.mouseButton.y / cellSize;
 
-                if (Grid[x][y] == 0) { // óáèë
-                    Grid[x][y] = -2;
+                if ((Grid[x][y] == 0
+                    || Grid[x][y] == -2
+                    || Grid[x][y] == 1
+                    || Grid[x][y] == 2
+                    || Grid[x][y] == 3
+                    || Grid[x][y] == 4
+                    || Grid[x][y] == 5
+                    || Grid[x][y] == 6
+                    || Grid[x][y] == 7
+                    || Grid[x][y] == 8
+                    || Grid[x][y] == -1
+                    ) && RevealGrid[x][y] == 0) { // óáèë
+                    RevealGrid[x][y] = 1;
                 }
-                else if (Grid[x][y] == 4) {
-                    Grid[x][y] = 4;
+                else if (Grid[x][y] == -3) {
+                    Grid[x][y] = -3;
                 }
-                else if (Grid[x][y] == 3) {
-                    Grid[x][y] = 3;
+                else if (Grid[x][y] == 1 && RevealGrid[x][y] == 1) {
+                    Grid[x][y] = 1;
                 }
-                else if (Grid[x][y] == 2) {
+                else if (Grid[x][y] == 2 && RevealGrid[x][y] == 1){
                     Grid[x][y] = 2;
                 }
-                else if (Grid[x][y] == -1) {
+                else if (Grid[x][y] == 3 && RevealGrid[x][y] == 1){
+                    Grid[x][y] = 3;
+                }
+                else if (Grid[x][y] == 4 && RevealGrid[x][y] == 1) {
+                    Grid[x][y] = 4;
+                }
+                else if (Grid[x][y] == 5 && RevealGrid[x][y] == 1) {
+                    Grid[x][y] = 5;
+                }
+                else if (Grid[x][y] == 6 && RevealGrid[x][y] == 1) {
+                    Grid[x][y] = 6;
+                }
+                else if (Grid[x][y] == 7 && RevealGrid[x][y] == 1) {
+                    Grid[x][y] = 7;
+                }
+                else if (Grid[x][y] == 8 && RevealGrid[x][y] == 1) {
+                    Grid[x][y] = 8;
+                }
+                else if (Grid[x][y] == -1 && RevealGrid[x][y] == -1) {
                     Grid[x][y] = -1;
                 }
             }
         }
         window.clear(Color::White);
 
-        for (int x = 1; x < size + 1; x++) {
+        /*for (int x = 1; x < size + 1; x++) {
             for (int y = 1; y < size + 1; y++) {
                 if (Grid[x][y] == 0) {
                     if (isClear(x, y, Grid, size) == true) {
@@ -347,9 +387,9 @@ int main() {
                     }
                 }
             }
-        }
+        }*/
 
-        drawGrid(window, Grid); // ðèñóåì ïîëå èãðîêà
+        drawGrid(window, Grid, RevealGrid); // ðèñóåì ïîëå èãðîêà
 
         window.display();
 
