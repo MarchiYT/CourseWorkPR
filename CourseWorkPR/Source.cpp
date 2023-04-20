@@ -5,8 +5,8 @@
 
 using namespace sf;
 
-const int cellSize = 32; // ðàçìåð ÿ÷ååê
-const int size = 10; // ðàçìåð ïîëÿ
+const int cellSize = 32;
+const int size = 10;
 const int numBombs = 10;
 int win = 0;
 bool islost = 0;
@@ -30,7 +30,7 @@ Texture face_happy;
 Texture face_lose;
 Texture face_win;
 
-int Grid[size + 2][size + 2]; // èãðîâîå ïîëå êîìïüþòåðà
+int Grid[size + 2][size + 2];
 int RevealGrid[size + 2][size + 2];
 
 void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid[size + 2][size + 2], int openCells) {
@@ -40,22 +40,22 @@ void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid
     for (int x = 0; x < size + 2; x++) {
         for (int y = 0; y < size + 2; y++) {
             cell.setPosition(x * cellSize, y * cellSize);
-            if (Grid[x][y] == -3) { // ïîïàäàíèå
+            if (Grid[x][y] == -3) {
                 cell.setTexture(border);
             }
-            else if (Grid[x][y] == -4 && islost != 1 && (win != 10 || openCells != (size * size - numBombs))) { // ïîïàäàíèå
+            else if (Grid[x][y] == -4 && islost != 1 && (win != 10 || openCells != (size * size - numBombs))) {
                 cell.setTexture(face_happy);
             }
-            else if (Grid[x][y] == -4 && win == 10 && islost != 1 && openCells == (size * size - numBombs)) { // ïîïàäàíèå
+            else if (Grid[x][y] == -4 && win == 10 && islost != 1 && openCells == (size * size - numBombs)) {
                 cell.setTexture(face_win);
             }
-            else if (Grid[x][y] == -4 && win != 10 && islost == 1) { // ïîïàäàíèå
+            else if (Grid[x][y] == -4 && win != 10 && islost == 1) {
                 cell.setTexture(face_lose);
             }
-            else if ((Grid[x][y] == -2 || Grid[x][y] == 0) && revealgrid[x][y] == 1) { // ïîïàäàíèå
+            else if ((Grid[x][y] == -2 || Grid[x][y] == 0) && revealgrid[x][y] == 1) {
                 cell.setTexture(revealed);
             }
-            else if ((Grid[x][y] == -1) && revealgrid[x][y] == 1) { // ïîïàäàíèå
+            else if ((Grid[x][y] == -1) && revealgrid[x][y] == 1) {
                 cell.setTexture(mine);
             }
             else if (revealgrid[x][y] == 0 && (Grid[x][y] == -1 
@@ -68,34 +68,34 @@ void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid
                                             || Grid[x][y] == 7 
                                             || Grid[x][y] == 8
                                             || Grid[x][y] == 0 
-                                            || Grid[x][y] == -2)) { // ïîïàäàíèå
+                                            || Grid[x][y] == -2)) {
                 cell.setTexture(hidden);
             }
-            else if (Grid[x][y] == 1 && revealgrid[x][y] == 1) { // ïàëóáà êîðàáëÿ
+            else if (Grid[x][y] == 1 && revealgrid[x][y] == 1) {
                 cell.setTexture(one);
             }
-            else if (Grid[x][y] == 2 && revealgrid[x][y] == 1) { // ïðîìàõ
+            else if (Grid[x][y] == 2 && revealgrid[x][y] == 1) {
                 cell.setTexture(two);
             }
-            else if (Grid[x][y] == 3 && revealgrid[x][y] == 1) { // ïðîìàõ
+            else if (Grid[x][y] == 3 && revealgrid[x][y] == 1) {
                 cell.setTexture(three);
             }
-            else if (Grid[x][y] == 4 && revealgrid[x][y] == 1) { // ïðîìàõ
+            else if (Grid[x][y] == 4 && revealgrid[x][y] == 1) {
                 cell.setTexture(four);
             }
-            else if (Grid[x][y] == 5 && revealgrid[x][y] == 1) { // ïðîìàõ
+            else if (Grid[x][y] == 5 && revealgrid[x][y] == 1) {
                 cell.setTexture(five);
             }
-            else if (Grid[x][y] == 6 && revealgrid[x][y] == 1) { // ïðîìàõ
+            else if (Grid[x][y] == 6 && revealgrid[x][y] == 1) {
                 cell.setTexture(six);
             }
-            else if (Grid[x][y] == 7 && revealgrid[x][y] == 1) { // ïðîìàõ
+            else if (Grid[x][y] == 7 && revealgrid[x][y] == 1) {
                 cell.setTexture(seven);
             }
-            else if (Grid[x][y] == 8 && revealgrid[x][y] == 1) { // ïðîìàõ
+            else if (Grid[x][y] == 8 && revealgrid[x][y] == 1) {
                 cell.setTexture(eight);
             }
-            else if (revealgrid[x][y] == 2) { // ïðîìàõ
+            else if (revealgrid[x][y] == 2) {
                 cell.setTexture(flag);
             }
             window.draw(cell);
@@ -104,23 +104,23 @@ void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid
 }
 
 void Bomb_placement(int Grid[size + 2][size + 2],int size, int numBombs) {
-    // Устанавливаем numBombs бомб на доске
+    
     int bombsPlaced = 0;
     while (bombsPlaced < numBombs) {
         int row = rand() % size + 1;
         int col = rand() % size + 1;
 
-        // Если в ячейке уже есть бомба, то продолжаем генерировать случайные координаты
+        
         if (Grid[row][col] == -1) {
             continue;
         }
 
-        // Устанавливаем бомбу в ячейке
+        
         Grid[row][col] = -1;
         bombsPlaced++;
     }
 
-    // Заполняем оставшиеся ячейки значениями, указывающими на количество бомб в соседних клетках
+    
     for (int row = 1; row < size + 1; row++) {
         for (int col = 1; col < size + 1; col++) {
             if (Grid[row][col] == -1 && Grid[row][col] != -3) {
@@ -210,8 +210,6 @@ int main() {
     face_win.loadFromFile("../images/face_win.png");
 
 
-
-    // èíèöèàëèçèðóåì ïîëå èãðîêà è êîìïüþòåðà
     for (int x = 1; x < size + 1; x++) {
         for (int y = 1; y < size + 1; y++) {
             Grid[x][y] = 0;
@@ -233,7 +231,7 @@ int main() {
 
     Grid[0][0] = -4;
 
-    // ðàíäîìíî ðàçìåùàåì êîðàáëè êîìïüþòåðà
+    
     srand(time(NULL));
 
     while (window.isOpen()) {
@@ -242,7 +240,7 @@ int main() {
             if (event.type == Event::Closed) {
                 window.close();
             }
-            if (event.type == Event::MouseButtonPressed) { // åñëè ñåé÷àñ õîä èãðîêà è îí íàæàë íà ÿ÷åéêó
+            if (event.type == Event::MouseButtonPressed) {
                 if (islost == 0) {
                     if (event.mouseButton.button == Mouse::Left && event.mouseButton.x >= cellSize && event.mouseButton.x < (size + 1) * cellSize && event.mouseButton.y >= cellSize && event.mouseButton.y < (size + 1) * cellSize) {
                         int x = event.mouseButton.x / cellSize;
@@ -269,12 +267,12 @@ int main() {
                             || Grid[x][y] == 6
                             || Grid[x][y] == 7
                             || Grid[x][y] == 8) 
-                            && RevealGrid[x][y] == 0) { // óáèë
+                            && RevealGrid[x][y] == 0) {
                             RevealGrid[x][y] = 1;
                         }
                         else if ((Grid[x][y] == 0
                             || Grid[x][y] == -2) 
-                            && RevealGrid[x][y] == 0) { // óáèë
+                            && RevealGrid[x][y] == 0) {
                             RevealGrid[x][y] = 1;
 
                         }
@@ -407,7 +405,7 @@ int main() {
 
         window.clear(Color::White);
 
-        drawGrid(window, Grid, RevealGrid, openCells); // ðèñóåì ïîëå èãðîêà
+        drawGrid(window, Grid, RevealGrid, openCells);
 
         window.display();
 
