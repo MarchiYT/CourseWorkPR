@@ -7,8 +7,8 @@
 using namespace sf;
 
 float cellSize;
-const int size = 10;
-const int numBombs = 10;
+const int size = 20;
+const int numBombs = 40;
 int win = 0;
 bool islost = 0;
 int face = 1;
@@ -45,13 +45,13 @@ void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid
             if (Grid[x][y] == -3) {
                 cell.setTexture(border);
             }
-            else if (Grid[x][y] == -4 && islost != 1 && (win != 10 || openCells != (size * size - numBombs))) {
+            else if (Grid[x][y] == -4 && islost != 1 && (win != numBombs || openCells != (size * size - numBombs))) {
                 cell.setTexture(face_happy);
             }
-            else if (Grid[x][y] == -4 && win == 10 && islost != 1 && openCells == (size * size - numBombs)) {
+            else if (Grid[x][y] == -4 && win == numBombs && islost != 1 && openCells == (size * size - numBombs)) {
                 cell.setTexture(face_win);
             }
-            else if (Grid[x][y] == -4 && win != 10 && islost == 1) {
+            else if (Grid[x][y] == -4 && win != numBombs && islost == 1) {
                 cell.setTexture(face_lose);
             }
             else if ((Grid[x][y] == -2 || Grid[x][y] == 0) && revealgrid[x][y] == 1) {
