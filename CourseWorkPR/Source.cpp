@@ -2,10 +2,11 @@
 #include <iostream>
 #include <cmath>
 #include <ctime>
+#include <windows.h>
 
 using namespace sf;
 
-const int cellSize = 32;
+float cellSize;
 const int size = 10;
 const int numBombs = 10;
 int win = 0;
@@ -33,9 +34,10 @@ Texture face_win;
 int Grid[size + 2][size + 2];
 int RevealGrid[size + 2][size + 2];
 
-void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid[size + 2][size + 2], int openCells) {
+void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid[size + 2][size + 2], int openCells, int Vertres) {
     Sprite cell;
     cell.setPosition(sf::Vector2f(cellSize, cellSize));
+    cell.setScale(cellSize/32, cellSize/32);
 
     for (int x = 0; x < size + 2; x++) {
         for (int y = 0; y < size + 2; y++) {
@@ -157,57 +159,80 @@ void Bomb_placement(int Grid[size + 2][size + 2],int size, int numBombs) {
 }
 
 int main() {
+
+    HDC hDCScreen = GetDC(NULL);
+    int Vertres = GetDeviceCaps(hDCScreen, VERTRES);
+    ReleaseDC(NULL, hDCScreen);
+
+    cellSize = Vertres / 33.75;
+
     RenderWindow window(VideoMode((size + 2) * cellSize, (size + 2) * cellSize), "Minesweeper", Style::Titlebar | Style::Close);
     window.setFramerateLimit(60);
 
 
     //Texture one;
     one.loadFromFile("../images/number_1.png");
+    one.setSmooth(true);
 
     //Texture two;
     two.loadFromFile("../images/number_2.png");
+    two.setSmooth(true);
 
     //Texture three;
     three.loadFromFile("../images/number_3.png");
+    three.setSmooth(true);
 
     //Texture four;
     four.loadFromFile("../images/number_4.png");
+    four.setSmooth(true);
 
     //Texture five;
     five.loadFromFile("../images/number_5.png");
+    five.setSmooth(true);
 
     //Texture six;
     six.loadFromFile("../images/number_6.png");
+    six.setSmooth(true);
 
     //Texture seven;
     seven.loadFromFile("../images/number_7.png");
+    seven.setSmooth(true);
 
     //Texture eight;
     eight.loadFromFile("../images/number_8.png");
+    eight.setSmooth(true);
 
     //Texture hidden;
     hidden.loadFromFile("../images/tile_hidden.png");
+    hidden.setSmooth(true);
 
     //Texture revealed;
     revealed.loadFromFile("../images/tile_revealed.png");
+    revealed.setSmooth(true);
 
     //Texture mine;
     mine.loadFromFile("../images/mine.png");
+    mine.setSmooth(true);
 
     //Texture flag;
     flag.loadFromFile("../images/flag.png");
+    flag.setSmooth(true);
 
     //Texture border;
     border.loadFromFile("../images/border.png");
+    border.setSmooth(true);
 
     //Texture face_happy;
     face_happy.loadFromFile("../images/face_happy.png");
+    face_happy.setSmooth(true);
 
     //Texture face_lose;
     face_lose.loadFromFile("../images/face_lose.png");
+    face_lose.setSmooth(true);
 
     //Texture face_win;
     face_win.loadFromFile("../images/face_win.png");
+    face_win.setSmooth(true);
 
 
     for (int x = 1; x < size + 1; x++) {
@@ -405,7 +430,7 @@ int main() {
 
         window.clear(Color::White);
 
-        drawGrid(window, Grid, RevealGrid, openCells);
+        drawGrid(window, Grid, RevealGrid, openCells, Vertres);
 
         window.display();
 
