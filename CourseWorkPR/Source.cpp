@@ -1,4 +1,5 @@
-﻿#include <SFML/Graphics.hpp>
+﻿#pragma warning(disable:4244)
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
 #include <ctime>
@@ -166,72 +167,73 @@ int main() {
 
     cellSize = Vertres / 33.75;
 
-    RenderWindow window(VideoMode((size + 2) * cellSize, (size + 2) * cellSize), "Minesweeper", Style::Titlebar | Style::Close);
+    RenderWindow window(VideoMode((size + 2) * (int)cellSize, (size + 2) * (int)cellSize), "Minesweeper", Style::Titlebar | Style::Close);
+    ShowWindow(GetConsoleWindow(), SW_HIDE);
     window.setFramerateLimit(60);
 
 
     //Texture one;
-    one.loadFromFile("../images/number_1.png");
+    one.loadFromFile("./images/number_1.png");
     one.setSmooth(true);
 
     //Texture two;
-    two.loadFromFile("../images/number_2.png");
+    two.loadFromFile("./images/number_2.png");
     two.setSmooth(true);
 
     //Texture three;
-    three.loadFromFile("../images/number_3.png");
+    three.loadFromFile("./images/number_3.png");
     three.setSmooth(true);
 
     //Texture four;
-    four.loadFromFile("../images/number_4.png");
+    four.loadFromFile("./images/number_4.png");
     four.setSmooth(true);
 
     //Texture five;
-    five.loadFromFile("../images/number_5.png");
+    five.loadFromFile("./images/number_5.png");
     five.setSmooth(true);
 
     //Texture six;
-    six.loadFromFile("../images/number_6.png");
+    six.loadFromFile("./images/number_6.png");
     six.setSmooth(true);
 
     //Texture seven;
-    seven.loadFromFile("../images/number_7.png");
+    seven.loadFromFile("./images/number_7.png");
     seven.setSmooth(true);
 
     //Texture eight;
-    eight.loadFromFile("../images/number_8.png");
+    eight.loadFromFile("./images/number_8.png");
     eight.setSmooth(true);
 
     //Texture hidden;
-    hidden.loadFromFile("../images/tile_hidden.png");
+    hidden.loadFromFile("./images/tile_hidden.png");
     hidden.setSmooth(true);
 
     //Texture revealed;
-    revealed.loadFromFile("../images/tile_revealed.png");
+    revealed.loadFromFile("./images/tile_revealed.png");
     revealed.setSmooth(true);
 
     //Texture mine;
-    mine.loadFromFile("../images/mine.png");
+    mine.loadFromFile("./images/mine.png");
     mine.setSmooth(true);
 
     //Texture flag;
-    flag.loadFromFile("../images/flag.png");
+    flag.loadFromFile("./images/flag.png");
     flag.setSmooth(true);
 
     //Texture border;
-    border.loadFromFile("../images/border.png");
+    border.loadFromFile("./images/border.png");
     border.setSmooth(true);
 
     //Texture face_happy;
-    face_happy.loadFromFile("../images/face_happy.png");
+    face_happy.loadFromFile("./images/face_happy.png");
     face_happy.setSmooth(true);
 
     //Texture face_lose;
-    face_lose.loadFromFile("../images/face_lose.png");
+    face_lose.loadFromFile("./images/face_lose.png");
     face_lose.setSmooth(true);
 
     //Texture face_win;
-    face_win.loadFromFile("../images/face_win.png");
+    face_win.loadFromFile("./images/face_win.png");
     face_win.setSmooth(true);
 
 
@@ -340,25 +342,25 @@ int main() {
                             Grid[x][y] = -1;
                         }
                     }
-                    else if (event.mouseButton.button == Mouse::Right) {
+                    else if (event.mouseButton.button == Mouse::Right && firstHit == 0) {
                         int x = event.mouseButton.x / cellSize;
                         int y = event.mouseButton.y / cellSize;
-                        if (Grid[x][y] == -1 && RevealGrid[x][y] == 0) {
+                        if (Grid[x][y] == -1 && RevealGrid[x][y] == 0 && Grid[x][y] != -3 && Grid[x][y] != -4) {
                             win++;
                         }
-                        else if (Grid[x][y] == -1 && RevealGrid[x][y] == 2) {
+                        else if (Grid[x][y] == -1 && RevealGrid[x][y] == 2 && Grid[x][y] != -3 && Grid[x][y] != -4) {
                             win--;
                         }
-                        else if (Grid[x][y] != -1 && RevealGrid[x][y] == 2) {
+                        else if (Grid[x][y] != -1 && RevealGrid[x][y] == 2 && Grid[x][y] != -3 && Grid[x][y] != -4) {
                             win++;
                         }
-                        else if (Grid[x][y] != -1 && RevealGrid[x][y] == 0) {
+                        else if (Grid[x][y] != -1 && RevealGrid[x][y] == 0 && Grid[x][y] != -3 && Grid[x][y] != -4) {
                             win--;
                         }
-                        if (RevealGrid[x][y] == 0) {
+                        if (RevealGrid[x][y] == 0 && Grid[x][y] != -3 && Grid[x][y] != -4) {
                             RevealGrid[x][y] = 2;
                         }
-                        else if (RevealGrid[x][y] == 2) {
+                        else if (RevealGrid[x][y] == 2 && Grid[x][y] != -3 && Grid[x][y] != -4) {
                             RevealGrid[x][y] = 0;
                         }
                     }
@@ -402,16 +404,16 @@ int main() {
                 for (int y = 1; y < size + 1; y++) {
                     if ((Grid[x][y] == 0 || Grid[x][y] == -2) && RevealGrid[x][y] == 1) {
 
-                        if (Grid[x + 1][y] != -3 && Grid[x + 1][y] != -4 && Grid[x + 1][y] != -1 && (x + 1) >= 1 && (x + 1) < size + 1 && y >= 1 && y < size + 1 && RevealGrid[x + 1][y] != 1) {
+                        if (Grid[x + 1][y] != -3 && Grid[x + 1][y] != -4 && Grid[x + 1][y] != -1 && (x + 1) >= 1 && (x + 1) < size + 1 && y >= 1 && y < size + 1 && RevealGrid[x + 1][y] != 1 && RevealGrid[x + 1][y] != 2) {
                             RevealGrid[x + 1][y] = 1;
                         }
-                        if (Grid[x - 1][y] != -3 && Grid[x - 1][y] != -4 && Grid[x - 1][y] != -1 && (x - 1) >= 1 && (x - 1) < size + 1 && y >= 1 && y < size + 1 && RevealGrid[x - 1][y] != 1) {
+                        if (Grid[x - 1][y] != -3 && Grid[x - 1][y] != -4 && Grid[x - 1][y] != -1 && (x - 1) >= 1 && (x - 1) < size + 1 && y >= 1 && y < size + 1 && RevealGrid[x - 1][y] != 1 && RevealGrid[x - 1][y] != 2) {
                             RevealGrid[x - 1][y] = 1;
                         }
-                        if (Grid[x][y + 1] != -3 && Grid[x][y + 1] != -4 && Grid[x][y + 1] != -1 && x >= 1 && x < size + 1 && (y + 1) >= 1 && (y + 1) < size + 1 && RevealGrid[x][y + 1] != 1) {
+                        if (Grid[x][y + 1] != -3 && Grid[x][y + 1] != -4 && Grid[x][y + 1] != -1 && x >= 1 && x < size + 1 && (y + 1) >= 1 && (y + 1) < size + 1 && RevealGrid[x][y + 1] != 1 && RevealGrid[x][y + 1] != 2) {
                             RevealGrid[x][y + 1] = 1;
                         }
-                        if (Grid[x][y - 1] != -3 && Grid[x][y - 1] != -4 && Grid[x][y - 1] != -1 && x >= 1 && x < size + 1 && (y - 1) >= 1 && (y - 1) < size + 1 && RevealGrid[x][y - 1] != 1) {
+                        if (Grid[x][y - 1] != -3 && Grid[x][y - 1] != -4 && Grid[x][y - 1] != -1 && x >= 1 && x < size + 1 && (y - 1) >= 1 && (y - 1) < size + 1 && RevealGrid[x][y - 1] != 1 && RevealGrid[x][y - 1] != 2) {
                             RevealGrid[x][y - 1] = 1;
                         }
                     }
@@ -434,7 +436,7 @@ int main() {
 
         window.display();
 
-        if (win == size && (openCells == (size*size-numBombs))) {
+        if (win == numBombs && (openCells == (size*size-numBombs))) {
             if (event.type == Event::MouseButtonPressed) {
                 if (event.mouseButton.x >= 0 && event.mouseButton.x <= cellSize && event.mouseButton.y >= 0 && event.mouseButton.y <= cellSize) {
                     for (int x = 1; x < size + 1; x++) {
