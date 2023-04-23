@@ -7,8 +7,8 @@
 using namespace sf;
 
 float cellSize;
-const int size = 20;
-const int numBombs = 40;
+const int size = 10;
+const int numBombs = 10;
 int win = 0;
 bool islost = 0;
 int face = 1;
