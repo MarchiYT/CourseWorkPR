@@ -185,77 +185,77 @@ void PlayingMusic() {
         while (newsong == 0) {
             int m = rand() % 15 + 1;
             if (m == 1 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music1.ogg");
+                music.openFromFile("./music/music1.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 2 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music2.ogg");
+                music.openFromFile("./music/music2.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 3 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music3.ogg");
+                music.openFromFile("./music/music3.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 4 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music4.ogg");
+                music.openFromFile("./music/music4.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 5 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music5.ogg");
+                music.openFromFile("./music/music5.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 6 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music6.ogg");
+                music.openFromFile("./music/music6.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 7 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music7.ogg");
+                music.openFromFile("./music/music7.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 8 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music8.ogg");
+                music.openFromFile("./music/music8.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 9 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music9.ogg");
+                music.openFromFile("./music/music9.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 10 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music10.ogg");
+                music.openFromFile("./music/music10.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 11 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music11.ogg");
+                music.openFromFile("./music/music11.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 12 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music12.ogg");
+                music.openFromFile("./music/music12.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 13 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music13.ogg");
+                music.openFromFile("./music/music13.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 14 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music14.ogg");
+                music.openFromFile("./music/music14.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
             else if (m == 15 && Musicqueue[m - 1] == 0) {
-                music.openFromFile("../music/music15.ogg");
+                music.openFromFile("./music/music15.ogg");
                 Musicqueue[m - 1] = 1;
                 newsong = 1;
             }
@@ -279,79 +279,79 @@ void PlayingMusic() {
 void init() {
 
     //Texture one;
-    one.loadFromFile("../images/number_1.png");
+    one.loadFromFile("./images/number_1.png");
     one.setSmooth(true);
 
     //Texture two;
-    two.loadFromFile("../images/number_2.png");
+    two.loadFromFile("./images/number_2.png");
     two.setSmooth(true);
 
     //Texture three;
-    three.loadFromFile("../images/number_3.png");
+    three.loadFromFile("./images/number_3.png");
     three.setSmooth(true);
 
     //Texture four;
-    four.loadFromFile("../images/number_4.png");
+    four.loadFromFile("./images/number_4.png");
     four.setSmooth(true);
 
     //Texture five;
-    five.loadFromFile("../images/number_5.png");
+    five.loadFromFile("./images/number_5.png");
     five.setSmooth(true);
 
     //Texture six;
-    six.loadFromFile("../images/number_6.png");
+    six.loadFromFile("./images/number_6.png");
     six.setSmooth(true);
 
     //Texture seven;
-    seven.loadFromFile("../images/number_7.png");
+    seven.loadFromFile("./images/number_7.png");
     seven.setSmooth(true);
 
     //Texture eight;
-    eight.loadFromFile("../images/number_8.png");
+    eight.loadFromFile("./images/number_8.png");
     eight.setSmooth(true);
 
     //Texture hidden;
-    hidden.loadFromFile("../images/tile_hidden.png");
+    hidden.loadFromFile("./images/tile_hidden.png");
     hidden.setSmooth(true);
 
     //Texture revealed;
-    revealed.loadFromFile("../images/tile_revealed.png");
+    revealed.loadFromFile("./images/tile_revealed.png");
     revealed.setSmooth(true);
 
     //Texture mine;
-    mine.loadFromFile("../images/mine.png");
+    mine.loadFromFile("./images/mine.png");
     mine.setSmooth(true);
 
     //Texture flag;
-    flag.loadFromFile("../images/flag.png");
+    flag.loadFromFile("./images/flag.png");
     flag.setSmooth(true);
 
     //Texture border;
-    border.loadFromFile("../images/border.png");
+    border.loadFromFile("./images/border.png");
     border.setSmooth(true);
 
     //Texture face_happy;
-    face_happy.loadFromFile("../images/face_happy.png");
+    face_happy.loadFromFile("./images/face_happy.png");
     face_happy.setSmooth(true);
 
     //Texture face_lose;
-    face_lose.loadFromFile("../images/face_lose.png");
+    face_lose.loadFromFile("./images/face_lose.png");
     face_lose.setSmooth(true);
 
     //Texture face_win;
-    face_win.loadFromFile("../images/face_win.png");
+    face_win.loadFromFile("./images/face_win.png");
     face_win.setSmooth(true);
 
     //Texture arrow;
-    arrow.loadFromFile("../images/arrow.png");
+    arrow.loadFromFile("./images/arrow.png");
     arrow.setSmooth(true);
 
     //Texture arrow;
-    pause.loadFromFile("../images/pause.png");
+    pause.loadFromFile("./images/pause.png");
     pause.setSmooth(true);
 
     //Texture arrow;
-    resume.loadFromFile("../images/resume.png");
+    resume.loadFromFile("./images/resume.png");
     resume.setSmooth(true);
 }
 
