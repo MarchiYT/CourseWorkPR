@@ -386,6 +386,28 @@ void newGrid() {
     srand(time(NULL));
 }
 
+void Buttonswl(Event event) {
+    if (event.mouseButton.button == Mouse::Left && event.mouseButton.x >= (size + 1) * cellSize && event.mouseButton.x < (size + 2) * cellSize && event.mouseButton.y >= (size + 1) * cellSize && event.mouseButton.y < (size + 2) * cellSize) {
+        music.stop();
+        if (ispaused == 1) {
+            Grid[size][size + 1] = -6;
+            ispaused = 0;
+        }
+                        }
+    else if (event.mouseButton.button == Mouse::Left && event.mouseButton.x >= size * cellSize && event.mouseButton.x < (size + 1) * cellSize && event.mouseButton.y >= (size + 1) * cellSize && event.mouseButton.y < (size + 2) * cellSize) {
+        if (ispaused == 0) {
+            Grid[size][size + 1] = -7;
+            music.pause();
+            ispaused = 1;
+        }
+        else if (ispaused == 1) {
+            Grid[size][size + 1] = -6;
+            music.play();
+            ispaused = 0;
+        }
+    }
+}
+
 int main() {
 
     HDC hDCScreen = GetDC(NULL);
@@ -433,7 +455,6 @@ int main() {
                             }
                             firstHit = 0;
                         }
-
                         if ((Grid[x][y] == 1
                             || Grid[x][y] == 2
                             || Grid[x][y] == 3
@@ -509,25 +530,7 @@ int main() {
                             RevealGrid[x][y] = 0;
                         }
                     }
-                    else if (event.mouseButton.button == Mouse::Left && event.mouseButton.x >= (size + 1) * cellSize && event.mouseButton.x < (size + 2) * cellSize && event.mouseButton.y >= (size + 1) * cellSize && event.mouseButton.y < (size + 2) * cellSize){
-                        music.stop();
-                        if (ispaused == 1) {
-                            Grid[size][size + 1] = -6;
-                            ispaused = 0;
-                        }
-                    }
-                    else if (event.mouseButton.button == Mouse::Left && event.mouseButton.x >= size * cellSize && event.mouseButton.x < (size + 1) * cellSize && event.mouseButton.y >= (size + 1) * cellSize && event.mouseButton.y < (size + 2) * cellSize) {
-                        if (ispaused == 0) {
-                            Grid[size][size + 1] = -7;
-                            music.pause();
-                            ispaused = 1;
-                        }
-                        else if (ispaused == 1) {
-                            Grid[size][size + 1] = -6;
-                            music.play();
-                            ispaused = 0;
-                        }
-                    }
+                    Buttonswl(event);
                 }
 
                 else if (islost == 1) {
@@ -538,6 +541,7 @@ int main() {
                             win = 0;
                             firstHit = 1;
                         }
+                        Buttonswl(event);
                     }
                 }
             }
