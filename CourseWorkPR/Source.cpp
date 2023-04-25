@@ -486,9 +486,6 @@ int main() {
                         else if (Grid[x][y] == -1 && RevealGrid[x][y] == 1) {
                             Grid[x][y] = -1;
                         }
-                        else if (RevealGrid[x][y] == 2) {
-                            Grid[x][y] = -1;
-                        }
                     }
                     else if (event.mouseButton.button == Mouse::Right && firstHit == 0) {
                         int x = event.mouseButton.x / cellSize;
