@@ -514,6 +514,10 @@ int main() {
                     }
                     else if (event.mouseButton.button == Mouse::Left && event.mouseButton.x >= (size + 1) * cellSize && event.mouseButton.x < (size + 2) * cellSize && event.mouseButton.y >= (size + 1) * cellSize && event.mouseButton.y < (size + 2) * cellSize){
                         music.stop();
+                        if (ispaused == 1) {
+                            Grid[size][size + 1] = -6;
+                            ispaused = 0;
+                        }
                     }
                     else if (event.mouseButton.button == Mouse::Left && event.mouseButton.x >= size * cellSize && event.mouseButton.x < (size + 1) * cellSize && event.mouseButton.y >= (size + 1) * cellSize && event.mouseButton.y < (size + 2) * cellSize) {
                         if (ispaused == 0) {
