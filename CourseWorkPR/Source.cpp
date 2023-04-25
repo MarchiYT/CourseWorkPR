@@ -159,19 +159,7 @@ void Bomb_placement(int Grid[size + 2][size + 2],int size, int numBombs) {
     }
 }
 
-int main() {
-
-    HDC hDCScreen = GetDC(NULL);
-    int Vertres = GetDeviceCaps(hDCScreen, VERTRES);
-    ReleaseDC(NULL, hDCScreen);
-
-    cellSize = Vertres / 33.75;
-
-    RenderWindow window(VideoMode((size + 2) * (int)cellSize, (size + 2) * (int)cellSize), "Minesweeper", Style::Titlebar | Style::Close);
-    ShowWindow(GetConsoleWindow(), SW_HIDE);
-    window.setFramerateLimit(60);
-
-
+void init() {
     //Texture one;
     one.loadFromFile("./images/number_1.png");
     one.setSmooth(true);
@@ -235,7 +223,21 @@ int main() {
     //Texture face_win;
     face_win.loadFromFile("./images/face_win.png");
     face_win.setSmooth(true);
+}
 
+int main() {
+
+    HDC hDCScreen = GetDC(NULL);
+    int Vertres = GetDeviceCaps(hDCScreen, VERTRES);
+    ReleaseDC(NULL, hDCScreen);
+
+    cellSize = Vertres / 33.75;
+
+    RenderWindow window(VideoMode((size + 2) * (int)cellSize, (size + 2) * (int)cellSize), "Minesweeper", Style::Titlebar | Style::Close);
+    ShowWindow(GetConsoleWindow(), SW_HIDE);
+    window.setFramerateLimit(60);
+
+    init();
 
     for (int x = 1; x < size + 1; x++) {
         for (int y = 1; y < size + 1; y++) {
