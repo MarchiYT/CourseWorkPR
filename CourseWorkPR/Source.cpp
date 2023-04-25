@@ -511,22 +511,22 @@ int main() {
                     else if (event.mouseButton.button == Mouse::Right && firstHit == 0) {
                         int x = event.mouseButton.x / cellSize;
                         int y = event.mouseButton.y / cellSize;
-                        if (Grid[x][y] == -1 && RevealGrid[x][y] == 0 && Grid[x][y] != -3 && Grid[x][y] != -4) {
+                        if (Grid[x][y] == -1 && RevealGrid[x][y] == 0 && Grid[x][y] != -3 && Grid[x][y] != -4 && Grid[x][y] != -5 && Grid[x][y] != -6 && Grid[x][y] != -7) {
                             win++;
                         }
-                        else if (Grid[x][y] == -1 && RevealGrid[x][y] == 2 && Grid[x][y] != -3 && Grid[x][y] != -4) {
+                        else if (Grid[x][y] == -1 && RevealGrid[x][y] == 2 && Grid[x][y] != -3 && Grid[x][y] != -4 && Grid[x][y] != -5 && Grid[x][y] != -6 && Grid[x][y] != -7) {
                             win--;
                         }
-                        else if (Grid[x][y] != -1 && RevealGrid[x][y] == 2 && Grid[x][y] != -3 && Grid[x][y] != -4) {
+                        else if (Grid[x][y] != -1 && RevealGrid[x][y] == 2 && Grid[x][y] != -3 && Grid[x][y] != -4 && Grid[x][y] != -5 && Grid[x][y] != -6 && Grid[x][y] != -7) {
                             win++;
                         }
-                        else if (Grid[x][y] != -1 && RevealGrid[x][y] == 0 && Grid[x][y] != -3 && Grid[x][y] != -4) {
+                        else if (Grid[x][y] != -1 && RevealGrid[x][y] == 0 && Grid[x][y] != -3 && Grid[x][y] != -4 && Grid[x][y] != -5 && Grid[x][y] != -6 && Grid[x][y] != -7) {
                             win--;
                         }
-                        if (RevealGrid[x][y] == 0 && Grid[x][y] != -3 && Grid[x][y] != -4) {
+                        if (RevealGrid[x][y] == 0 && Grid[x][y] != -3 && Grid[x][y] != -4 && Grid[x][y] != -5 && Grid[x][y] != -6 && Grid[x][y] != -7) {
                             RevealGrid[x][y] = 2;
                         }
-                        else if (RevealGrid[x][y] == 2 && Grid[x][y] != -3 && Grid[x][y] != -4) {
+                        else if (RevealGrid[x][y] == 2 && Grid[x][y] != -3 && Grid[x][y] != -4 && Grid[x][y] != -5 && Grid[x][y] != -6 && Grid[x][y] != -7) {
                             RevealGrid[x][y] = 0;
                         }
                     }
