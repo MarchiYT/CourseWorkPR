@@ -7,7 +7,7 @@
 #include <windows.h>
 
 using namespace sf;
-
+//Объявление переменных, текстур, музыки и массивов
 float cellSize;
 const int size = 10;
 const int numBombs = 10;
@@ -41,12 +41,12 @@ Music music;
 int Grid[size + 2][size + 2];
 int RevealGrid[size + 2][size + 2];
 int Musicqueue[15];
-
+//Функция drawGrid отвечает за отрисовку поля по одному селлу
 void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid[size + 2][size + 2], int openCells, int Vertres) {
-    Sprite cell;
+    Sprite cell; //Объявление селла, который мы будем отрисовывать
     cell.setPosition(sf::Vector2f(cellSize, cellSize));
     cell.setScale(cellSize/32, cellSize/32);
-
+    //Проверка элемента массива, чтобы отрисовать соответствующие селл с нужной текстурой
     for (int x = 0; x < size + 2; x++) {
         for (int y = 0; y < size + 2; y++) {
             cell.setPosition(x * cellSize, y * cellSize);
@@ -117,13 +117,13 @@ void drawGrid(RenderWindow& window, int grid[size + 2][size + 2], int revealgrid
             else if (revealgrid[x][y] == 2) {
                 cell.setTexture(flag);
             }
-            window.draw(cell);
+            window.draw(cell);//отрисовка селла
         }
     }
 }
-
+//Функция Bomb_placement отвечает за расстановку бомб и внесение значения об окружающих бомбах а массив
 void Bomb_placement(int Grid[size + 2][size + 2],int size, int numBombs) {
-    
+    //Расстановка бомб
     int bombsPlaced = 0;
     while (bombsPlaced < numBombs) {
         int row = rand() % size + 1;
@@ -139,7 +139,7 @@ void Bomb_placement(int Grid[size + 2][size + 2],int size, int numBombs) {
         bombsPlaced++;
     }
 
-    
+    //Внесение в клетку значения о рядом стоящих бомбах
     for (int row = 1; row < size + 1; row++) {
         for (int col = 1; col < size + 1; col++) {
             if (Grid[row][col] == -1 && Grid[row][col] != -3) {
@@ -174,13 +174,13 @@ void Bomb_placement(int Grid[size + 2][size + 2],int size, int numBombs) {
         }
     }
 }
-
+//Функция PlayingMusic отвечает за проверку работает ли музыка, и если нет, включает её
 void PlayingMusic() {
     srand(time(NULL));
     if (music.getStatus() != 0) {
         return;
     }
-    else {
+    else {//тут у меня такая система, что индекс музыки идёт в массив, номера которого не повторяются и рандомно выбираются
         bool newsong = 0;
         while (newsong == 0) {
             int m = rand() % 15 + 1;
@@ -260,10 +260,10 @@ void PlayingMusic() {
                 newsong = 1;
             }
         }
-        music.play();
+        music.play();//лютый навал музыки
     }
     music.setVolume(10);
-    int count = 0;
+    int count = 0;//если все песенки отыграли, очередь заново выстраевается
     for (int i = 0; i < 15; i++) {
         if (Musicqueue[i] == 1) {
             count++;
@@ -275,7 +275,7 @@ void PlayingMusic() {
         }
     }
 }
-
+//Тут просто иницаилизация всех текстур
 void init() {
 
     //Texture one;
@@ -354,7 +354,7 @@ void init() {
     resume.loadFromFile("./images/resume.png");
     resume.setSmooth(true);
 }
-
+//Эта функция очищает наш массив
 void newGrid() {
     for (int x = 1; x < size + 1; x++) {
         for (int y = 1; y < size + 1; y++) {
@@ -385,7 +385,7 @@ void newGrid() {
     }
     srand(time(NULL));
 }
-
+//Эта функция нужна для того, чтобы менять значения кнопки паузы
 void Buttonswl(Event event) {
     if (event.mouseButton.button == Mouse::Left && event.mouseButton.x >= (size + 1) * cellSize && event.mouseButton.x < (size + 2) * cellSize && event.mouseButton.y >= (size + 1) * cellSize && event.mouseButton.y < (size + 2) * cellSize) {
         music.stop();
@@ -409,41 +409,41 @@ void Buttonswl(Event event) {
 }
 
 int main() {
-
+    //Тут мы получаем высоту окна
     HDC hDCScreen = GetDC(NULL);
     int Vertres = GetDeviceCaps(hDCScreen, VERTRES);
     ReleaseDC(NULL, hDCScreen);
-
+    //Тут размер селла задается в зависимости от высоты окна(на 4к телеке все ок будет:))
     cellSize = Vertres / 33.75;
-
+    //Тут мы создаем окошечко
     RenderWindow window(VideoMode((size + 2) * (int)cellSize, (size + 2) * (int)cellSize), "Minesweeper", Style::Titlebar | Style::Close);
     ShowWindow(GetConsoleWindow(), SW_HIDE);
     window.setFramerateLimit(60);
-
+    //Чистил массив музыки
     for (int i = 0; i < 15; i++) {
         Musicqueue[i] = 0;
     }
-
+    //Включаем навал музла
     PlayingMusic();
-
+    //Инициализируем текстуры
     init();
-
+    //Очищаем поле для игры
     newGrid();
-
+    //Тут начинается игра
     while (window.isOpen()) {
-        PlayingMusic();
-        Event event;
+        PlayingMusic();//Проверяем музло
+        Event event;//Объявляем ивент
         while (window.pollEvent(event)) {
-            if (event.type == Event::Closed) {
+            if (event.type == Event::Closed) {//Закрытие игры
                 window.close();
             }
-            if (event.type == Event::MouseButtonPressed) {
-                if (islost == 0) {
+            if (event.type == Event::MouseButtonPressed) {//Нажали на мышку(норушку)
+                if (islost == 0) {//Тут начинается стрельба
                     if (event.mouseButton.button == Mouse::Left && event.mouseButton.x >= cellSize && event.mouseButton.x < (size + 1) * cellSize && event.mouseButton.y >= cellSize && event.mouseButton.y < (size + 1) * cellSize) {
-                        int x = event.mouseButton.x / cellSize;
+                        int x = event.mouseButton.x / cellSize;//Тут мы берём координаты нашего выстрела
                         int y = event.mouseButton.y / cellSize;
 
-                        if (firstHit == 1) {
+                        if (firstHit == 1) {//Если мы ещё не стреляли генерим новый массив, чтобы мо попали точно в 0
                             Bomb_placement(Grid, size, numBombs);
                             while (Grid[x][y] == -1 || Grid[x][y] == 1 || Grid[x][y] == 2 || Grid[x][y] == 3 || Grid[x][y] == 4 || Grid[x][y] == 5 || Grid[x][y] == 6 || Grid[x][y] == 7 || Grid[x][y] == 8) {
                                 for (int x = 1; x < size + 1; x++) {
@@ -454,7 +454,7 @@ int main() {
                                 Bomb_placement(Grid, size, numBombs);
                             }
                             firstHit = 0;
-                        }
+                        }//Ну а тут у нас изменение массисов, в зависимости от того, куда мы стреляли
                         if ((Grid[x][y] == 1 || Grid[x][y] == 2 || Grid[x][y] == 3 || Grid[x][y] == 4 || Grid[x][y] == 5 || Grid[x][y] == 6 || Grid[x][y] == 7 || Grid[x][y] == 8) && RevealGrid[x][y] == 0) {
                             RevealGrid[x][y] = 1;
                         }
@@ -499,7 +499,7 @@ int main() {
                         else if (Grid[x][y] == -1 && RevealGrid[x][y] == 1) {
                             Grid[x][y] = -1;
                         }
-                    }
+                    }//Тут у нас расстановка флагов
                     else if (event.mouseButton.button == Mouse::Right && firstHit == 0) {
                         int openCells = 0;
                         for (int x = 1; x < size + 1; x++) {
@@ -508,7 +508,7 @@ int main() {
                                     openCells++;
                                 }
                             }
-                        }
+                        }//Тут микро проверочка, что мы ещё не выйграли
                         if ((win != numBombs || (openCells != (size * size - numBombs)))) {
                             int x = event.mouseButton.x / cellSize;
                             int y = event.mouseButton.y / cellSize;
@@ -531,9 +531,9 @@ int main() {
                                 RevealGrid[x][y] = 0;
                             }
                         }
-                    }
+                    }//Обновляем смайлик в зависимости от исхода стрельбы
                     Buttonswl(event);
-                }
+                }//Тут проверка, что если проиграли, при нажатии на смайлик, игра обновлятся
                 else if (islost == 1) {
                     if (event.type == Event::MouseButtonPressed) {
                         if (event.mouseButton.x >= 0 && event.mouseButton.x <= cellSize && event.mouseButton.y >= 0 && event.mouseButton.y <= cellSize) {
@@ -541,13 +541,13 @@ int main() {
                             islost = 0;
                             win = 0;
                             firstHit = 1;
-                        }
+                        }//Обновляем смайлик в зависимости от исхода стрельбы
                         Buttonswl(event);
                     }
                 }
             }
         }
-
+        //Тут мы вскрываем все клетки, рядом с пустой открытой
         for (int i = 0; i < size * size; i++) {
             for (int x = 1; x < size + 1; x++) {
                 for (int y = 1; y < size + 1; y++) {
@@ -569,7 +569,7 @@ int main() {
                 }
             }
         }
-
+        //Это нам надо, чтобы на победу проверить
         int openCells = 0;
         for (int x = 1; x < size + 1; x++) {
             for (int y = 1; y < size + 1; y++) {
@@ -578,13 +578,13 @@ int main() {
                 }
             }
         }
-
+        //Отчистка окна
         window.clear(Color::White);
-
+        //Отрисовка поля
         drawGrid(window, Grid, RevealGrid, openCells, Vertres);
-
+        //Лютый показ окна
         window.display();
-
+        //Тут проверочка на победу
         if (win == numBombs && (openCells == (size*size-numBombs))) {
             if (event.type == Event::MouseButtonPressed) {
                 if (event.mouseButton.x >= 0 && event.mouseButton.x <= cellSize && event.mouseButton.y >= 0 && event.mouseButton.y <= cellSize) {
